@@ -16,17 +16,27 @@ function onSearch () {
     var healthy = document.getElementById('first-option').value;
     var diety = document.getElementById('second-option').value;
 
+    var httpOne = "https://api.edamam.com/search?q=" + searchField.value + "&app_id=" +  appIdKey + "&app_key=" + key;
+
+    var httpTwo = "https://api.edamam.com/search?q=" + searchField.value + "&app_id=" +  appIdKey + "&app_key=" + key + "&health=" + healthy + "&diet=" + diety;
+
+    if(searchField.value && !healthy && !diety){
+        getRecepie(httpOne)
+    } else if(searchField.value && healthy && diety){
+        getRecepie(httpTwo)
+    }
+
     searchField.value && getRecepie(searchField.value, healthy, diety)
 
     searchField.value = '';
        
 }
 
-function getRecepie (recepie, healthy, diety) {
+function getRecepie (req) {
 
    var request = new XMLHttpRequest ();
 
-    request.open("GET", "https://api.edamam.com/search?q=" + recepie + "&app_id=" +  appIdKey + "&app_key=" + key + "&health=" + healthy + "&diet=" + diety);
+    request.open("GET", req);
 
     request.onload = function() {
         listRecipes(JSON.parse(request.responseText).hits);
@@ -100,7 +110,6 @@ function addRecipe (data) {
 }
 
 button.addEventListener('click', onSearch);
-
 
 
 
